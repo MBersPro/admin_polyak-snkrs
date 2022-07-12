@@ -5,10 +5,8 @@ import {
   collection,
   getDocs,
   addDoc,
+  deleteDoc,
   doc,
-  ref
-  // deleteDoc,
-  // doc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -35,3 +33,8 @@ export const getProducts = () => {
 export const addProduct = (product) => {
   addDoc(sneakersCol, product);
 };
+
+export const deleteProduct = (id) => {
+  const docRef = doc(db, "Sneakers", id)
+  deleteDoc(docRef)
+}

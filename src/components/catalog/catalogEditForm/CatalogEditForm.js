@@ -1,26 +1,15 @@
 import React, { useState } from "react";
-import { addProduct } from "../../../utils/firebase";
-import "./CatalogAddForm.css";
+import "./CatalogEditForm.css";
+import { addProduct, deleteProduct } from "../../../utils/firebase";
 
-const initialState = {
-  name: "",
-  brand: "",
-  model: "",
-  price: "",
-  catalogImage: "",
-  images: [""],
-  description: "",
-};
-
-const CatalogAddForm = ({ setCatalogForms }) => {
-  const [formState, setFormState] = useState(initialState);
+const CatalogEditForm = ({ editProduct, setCatalogForms }) => {
+  const [formState, setFormState] = useState(editProduct);
   const [imagesInputNumber, setImagesInputNumber] = useState([0]);
 
   const onHandleSubmit = (e) => {
     e.preventDefault();
-    addProduct({ ...formState, price: parseInt(formState.price, 0) });
-    setFormState({ ...initialState });
-    setImagesInputNumber([0]);
+    deleteProduct(editProduct.id);
+    addProduct(formState);
   };
 
   const onHandleChange = (e) => {
@@ -54,7 +43,6 @@ const CatalogAddForm = ({ setCatalogForms }) => {
       setImagesInputNumber((prev) => [...prev.slice(0, -1)]);
     }
   };
-
   return (
     <div className="catalogAddForm_overlay">
       <div className="container catalogAddForm_container">
@@ -118,26 +106,23 @@ const CatalogAddForm = ({ setCatalogForms }) => {
               value={formState.catalogImage}
               name="catalogImage"
               type="text"
-              required
             />
           </label>
           {imagesInputNumber.map((number) => (
-            <label
-              key={number}
-              className="catalogAddForm_label"
-              htmlFor="images"
-            >
-              Images:
-              <input
-                className="catalogAddForm_input"
-                id={number}
-                onChange={onHandleChangeImage}
-                value={formState.images[number]}
-                name="images"
-                type="text"
-                required
-              />
-            </label>
+            <>
+              <label className="catalogAddForm_label" htmlFor="images">
+                Images:
+                <input
+                  className="catalogAddForm_input"
+                  id={number}
+                  onChange={onHandleChangeImage}
+                  value={formState.images[number]}
+                  name="images"
+                  type="text"
+                  required
+                />
+              </label>
+            </>
           ))}
 
           <button
@@ -155,7 +140,7 @@ const CatalogAddForm = ({ setCatalogForms }) => {
             Удалить поле ввода для изображения
           </button>
 
-          <label className="catalogAddForm_label" for="description">
+          <label className="catalogAddForm_label" htmlFor="description">
             Описание товара
             <textarea
               className="catalogAddForm_textarea"
@@ -167,7 +152,7 @@ const CatalogAddForm = ({ setCatalogForms }) => {
             ></textarea>
           </label>
           <button className="catalogAddForm_button" type="submit">
-            Add a new product
+            Edit product
           </button>
         </form>
       </div>
@@ -175,4 +160,4 @@ const CatalogAddForm = ({ setCatalogForms }) => {
   );
 };
 
-export default CatalogAddForm;
+export default CatalogEditForm;
